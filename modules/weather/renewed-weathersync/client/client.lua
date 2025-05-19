@@ -1,4 +1,4 @@
-if GetResourceState('Renewed-Weathersync') ~= 'started' then return end
+if GetResourceState('Renewed-Weathersync') == 'missing' then return end
 Weather = Weather or {}
 
 ---comment
@@ -6,3 +6,5 @@ Weather = Weather or {}
 Weather.ToggleSync = function(toggle)
     LocalPlayer.state.syncWeather = toggle
 end
+
+return Weather

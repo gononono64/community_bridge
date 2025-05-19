@@ -1,4 +1,4 @@
-if GetResourceState('qs-dispatch') ~= 'started' then return end
+if GetResourceState('qs-dispatch') == 'missing' then return end
 Dispatch = Dispatch or {}
 
 Dispatch.SendAlert = function(data)
@@ -36,3 +36,5 @@ Dispatch.SendAlert = function(data)
         TriggerServerEvent('qs-dispatch:server:CreateDispatchCall', customData)
     end)
 end
+
+return Dispatch

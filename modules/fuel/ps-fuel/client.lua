@@ -1,7 +1,5 @@
 local resourceName = "ps-fuel"
-local configValue = BridgeClientConfig.Fuel
-if (configValue == "auto" and GetResourceState(resourceName) ~= "started") or (configValue ~= "auto" and configValue ~= resourceName) then return end
-
+if GetResourceState(resourceName) == 'missing' then return end
 Fuel = Fuel or {}
 
 ---This will get the name of the Fuel being used (if a supported Fuel).
@@ -26,3 +24,5 @@ Fuel.SetFuel = function(vehicle, fuel, type)
     if not DoesEntityExist(vehicle) then return end
     return exports["ps-fuel"]:SetFuel(vehicle, fuel)
 end
+
+return Fuel

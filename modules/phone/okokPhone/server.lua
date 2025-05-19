@@ -14,8 +14,7 @@
 ---@field data any
 
 local resourceName = "okokPhone"
-local configValue = BridgeSharedConfig.Phone
-if (configValue == "auto" and GetResourceState(resourceName) ~= "started") or (configValue ~= "auto" and configValue ~= resourceName) then return end
+if GetResourceState(resourceName) == 'missing' then return end
 Phone = Phone or {}
 
 ---comment
@@ -49,7 +48,9 @@ Phone.SendEmail = function(src, email, title, message)
     return success
 end
 
-
+--<-- TODO swap to internal callback system
 lib.callback.registry('community_bridge:Callback:okokPhone:sendEmail', function(src, email, title, message)
     return Phone.SendEmail(src, email, title, message)
 end)
+
+return Phone

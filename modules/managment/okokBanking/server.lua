@@ -1,25 +1,32 @@
-if GetResourceState('okokBanking') ~= 'started' then return end
+---@diagnostic disable: duplicate-set-field
+if GetResourceState('okokBanking') == 'missing' then return end
 Managment = Managment or {}
+
+local okokBanking = exports['okokBanking']
 
 ---This will return a table with account details
 ---@param account string
 ---@return table
 Managment.GetAccountMoney = function(account)
-    return exports['okokBanking']:GetAccount(account)
+    return okokBanking:GetAccount(account)
 end
 
 ---This will add money to the specified account of the passed amount
 ---@param account string
 ---@param amount number
+---@param _ string
 ---@return boolean
-Managment.AddAccountMoney = function(account, amount)
-    return exports['okokBanking']:AddMoney(account, amount)
+Managment.AddAccountMoney = function(account, amount, _)
+    return okokBanking:AddMoney(account, amount)
 end
 
 ---This will remove money from the specified account of the passed amount
 ---@param account string
 ---@param amount number
+---@param _ string
 ---@return boolean
-Managment.RemoveAccountMoney = function(account, amount)
-    return exports['okokBanking']:RemoveMoney(account, amount)
+Managment.RemoveAccountMoney = function(account, amount, _)
+    return okokBanking:RemoveMoney(account, amount)
 end
+
+return Managment

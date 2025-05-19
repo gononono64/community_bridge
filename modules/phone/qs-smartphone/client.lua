@@ -1,6 +1,5 @@
 local resourceName = "qs-smartphone"
-local configValue = BridgeSharedConfig.Phone
-if (configValue == "auto" and GetResourceState(resourceName) ~= "started") or (configValue ~= "auto" and configValue ~= resourceName) then return end
+if GetResourceState(resourceName) == 'missing' then return end
 Phone = Phone or {}
 
 ---comment
@@ -16,3 +15,5 @@ end
 RegisterNetEvent('community_bridge:Server:genericEmail', function(data)
     TriggerServerEvent('qs-smartphone:server:sendNewMail', { sender = data.email, subject = data.title, message = data.message, button = {} })
 end)
+
+return Phone

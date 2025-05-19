@@ -1,4 +1,4 @@
-if GetResourceState('cd_dispatch') ~= 'started' then return end
+if GetResourceState('cd_dispatch') == 'missing' then return end
 Dispatch = Dispatch or {}
 
 Dispatch.SendAlert = function(data)
@@ -22,3 +22,5 @@ Dispatch.SendAlert = function(data)
         }
     })
 end
+
+return Dispatch

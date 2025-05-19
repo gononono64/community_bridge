@@ -1,7 +1,6 @@
 local resourceName = "sleepless_interact"
-local configValue = BridgeClientConfig.TargetSystem
-if (configValue == "auto" and GetResourceState(resourceName) ~= "started") or (configValue ~= "auto" and configValue ~= resourceName) then return end
-
+if GetResourceState(resourceName) == 'missing' then return end
+if GetResourceState("ox_target") == 'started' then return end
 
 local targetDebug = false
 local function detectDebugEnabled()
@@ -40,7 +39,6 @@ Target.AddGlobalPlayer = function(options)
 end
 
 Target.DisableTargeting = function(bool)
-    --sleepless_interact:disableTargeting(bool)
     sleepless_interact:disableInteract(bool)
 end
 
@@ -139,3 +137,5 @@ AddEventHandler('onResourceStop', function(resource)
         targetZones = {}
     end
 end)
+
+return Target

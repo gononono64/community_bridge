@@ -1,7 +1,5 @@
 local resourceName = "ti_fuel"
-local configValue = BridgeClientConfig.Fuel
-if (configValue == "auto" and GetResourceState(resourceName) ~= "started") or (configValue ~= "auto" and configValue ~= resourceName) then return end
-
+if GetResourceState(resourceName) == 'missing' then return end
 Fuel = Fuel or {}
 
 ---This will get the name of the Fuel being used (if a supported Fuel).
@@ -27,3 +25,5 @@ Fuel.SetFuel = function(vehicle, fuel)
     if not DoesEntityExist(vehicle) then return end
     return exports['ti_fuel']:setFuel(vehicle, fuel, "RON91")
 end
+
+return Fuel

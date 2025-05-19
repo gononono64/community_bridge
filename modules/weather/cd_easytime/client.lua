@@ -1,4 +1,4 @@
-if GetResourceState('cd_easytime') ~= 'started' then return end
+if GetResourceState('cd_easytime') == 'missing' then return end
 Weather = Weather or {}
 
 ---comment
@@ -6,3 +6,5 @@ Weather = Weather or {}
 Weather.ToggleSync = function(toggle)
     TriggerEvent('cd_easytime:PauseSync', toggle)
 end
+
+return Weather

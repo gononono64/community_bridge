@@ -1,4 +1,5 @@
-if GetResourceState('ox_doorlock') ~= 'started' then return end
+---@diagnostic disable: duplicate-set-field
+if GetResourceState('ox_doorlock') == 'missing' then return end
 
 Doorlock = Doorlock or {}
 
@@ -15,3 +16,5 @@ Doorlock.ToggleDoorLock = function(doorID, toggle)
     end
     return true
 end
+
+return Doorlock

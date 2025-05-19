@@ -1,4 +1,4 @@
-if GetResourceState('redutzu-mdt') ~= 'started' then return end
+if GetResourceState('redutzu-mdt') == 'missing' then return end
 Dispatch = Dispatch or {}
 
 Dispatch.SendAlert = function(data)
@@ -12,3 +12,5 @@ Dispatch.SendAlert = function(data)
     }
     TriggerServerEvent("community_bridge:server:dispatch:sendAlert", alertData)
 end
+
+return Dispatch

@@ -1,4 +1,5 @@
-if GetResourceState('qb-doorlock') ~= 'started' then return end
+---@diagnostic disable: duplicate-set-field
+if GetResourceState('qb-doorlock') == 'missing' then return end
 
 Doorlock = Doorlock or {}
 
@@ -20,3 +21,5 @@ Doorlock.GetClosestDoor = function()
     end
     return door
 end
+
+return Doorlock

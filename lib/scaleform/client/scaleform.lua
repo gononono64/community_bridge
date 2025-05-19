@@ -1,40 +1,84 @@
-Scaleform = {}
+---@class Scaleform
+local Scaleform = {}
 
-function SetupScaleform(scaleform, Buttons)
-    local scaleform = RequestScaleformMovie(scaleform)
-    local timeout = 5000
+-- Constants
+local SCALEFORM_TIMEOUT = 5000
+local BACKGROUND_COLOR_VALUE = 80
+local CONTROL_TYPE = 2
+local RENDER_WAIT_TIME = 2
+
+-- Local utility functions
+local function setupButton(scaleform, button)
+    PushScaleformMovieFunction(scaleform, button.type)
+
+    if button.int then
+        PushScaleformMovieFunctionParameterInt(button.int)
+    end
+
+    -- Handle key index setup
+    if button.keyIndex then
+        if type(button.keyIndex) == "table" then
+            for _, keyCode in pairs(button.keyIndex) do
+                N_0xe83a3e3557a56640(GetControlInstructionalButton(CONTROL_TYPE, keyCode, true))
+            end
+        else
+            ScaleformMovieMethodAddParamPlayerNameString(GetControlInstructionalButton(CONTROL_TYPE, button.keyIndex[1],
+                true))
+        end
+    end
+
+    -- Handle button name setup
+    if button.name then
+        BeginTextCommandScaleformString("STRING")
+        AddTextComponentScaleform(button.name)
+        EndTextCommandScaleformString()
+    end
+
+    -- Handle background color
+    if button.type == 'SET_BACKGROUND_COLOUR' then
+        for _ = 1, 4 do
+            PushScaleformMovieFunctionParameterInt(BACKGROUND_COLOR_VALUE)
+        end
+    end
+
+    PopScaleformMovieFunctionVoid()
+end
+
+---Creates and sets up a scaleform movie
+---@param scaleformName string The name of the scaleform to load
+---@param buttons table Array of button configurations
+---@return number scaleform The loaded scaleform handle
+local function setupScaleform(scaleformName, buttons)
+    local scaleform = RequestScaleformMovie(scaleformName)
+    local timeout = SCALEFORM_TIMEOUT
+
+    -- Wait for scaleform to load
     while not HasScaleformMovieLoaded(scaleform) and timeout > 0 do
         timeout = timeout - 1
         Wait(0)
     end
-    assert(timeout > 0, 'Scaleform failed to load')
+
+    if timeout <= 0 then
+        error('Scaleform failed to load: ' .. scaleformName)
+    end
 
     DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 0, 0)
-    for i = 1,#Buttons do
-        PushScaleformMovieFunction(scaleform, Buttons[i].type)
-        if Buttons[i].int then PushScaleformMovieFunctionParameterInt(Buttons[i].int) end
-        if Buttons[i].keyIndex then
-            if type(Buttons[i].keyIndex) == "table" then
-                for _, v in pairs(Buttons[i].keyIndex) do N_0xe83a3e3557a56640(GetControlInstructionalButton(2, v, true)) end
-            else
-                ScaleformMovieMethodAddParamPlayerNameString(GetControlInstructionalButton(2, Buttons[i].keyIndex[1], true))
-            end
-        end
-        if Buttons[i].name then
-            BeginTextCommandScaleformString("STRING")
-            AddTextComponentScaleform(Buttons[i].name)
-            EndTextCommandScaleformString()
-        end
-        if Buttons[i].type == 'SET_BACKGROUND_COLOUR' then
-            for u = 1,4 do PushScaleformMovieFunctionParameterInt(80) end
-        end
-        PopScaleformMovieFunctionVoid()
+
+    -- Setup each button
+    for _, button in ipairs(buttons) do
+        setupButton(scaleform, button)
     end
+
     return scaleform
 end
 
+---Sets up instructional buttons with default configuration
+---@param buttons table Optional custom button configuration
+---@return number scaleform The configured instructional buttons scaleform
 function Scaleform.SetupInstructionalButtons(buttons)
     buttons = buttons or {
+        -- Default button configuration commented out
+        -- Uncomment and modify as needed
         -- {type = "CLEAR_ALL"},
         -- {type = "SET_CLEAR_SPACE", int = 200},
         -- {type = "SET_DATA_SLOT", name = config?.place_object?.name or 'Place Object:', keyIndex = config?.place_object?.key or {223}, int = 5},
@@ -46,33 +90,40 @@ function Scaleform.SetupInstructionalButtons(buttons)
         -- {type = "DRAW_INSTRUCTIONAL_BUTTONS"},
         -- {type = "SET_BACKGROUND_COLOUR"},
     }
-    local scaleform = SetupScaleform("instructional_buttons", buttons)
 
-    return scaleform
+    return setupScaleform("instructional_buttons", buttons)
 end
 
+-- Active scaleform tracking
+local activeScaleform = nil
 
-local runningScaleform = nil
+---Runs a scaleform with optional update callback
+---@param scaleform number The scaleform handle to run
+---@param onUpdate function Optional callback for updates during runtime
 function Scaleform.Run(scaleform, onUpdate)
-    if runningScaleform then return end
-    runningScaleform = scaleform
+    if activeScaleform then return end
+    activeScaleform = scaleform
+
     CreateThread(function()
-        while runningScaleform do
+        while activeScaleform do
             DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
+
             if onUpdate then
-                shouldQuit = onUpdate()
-                if shouldQuit then
+                local shouldStop = onUpdate()
+                if shouldStop then
                     Scaleform.Stop()
                     break
                 end
             end
-            Wait(2)
+
+            Wait(RENDER_WAIT_TIME)
         end
     end)
 end
 
+---Stops the currently running scaleform
 function Scaleform.Stop()
-    runningScaleform = nil
+    activeScaleform = nil
 end
 
 exports("Scaleform", Scaleform)

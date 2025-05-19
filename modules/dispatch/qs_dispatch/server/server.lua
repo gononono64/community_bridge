@@ -1,2 +1,4 @@
-if GetResourceState('qs-dispatch') ~= 'started' then return end
+if GetResourceState('qs-dispatch') == 'missing' then return end
 Dispatch = Dispatch or {}
+
+return Dispatch

@@ -1,4 +1,4 @@
-if GetResourceState('tk_dispatch') ~= 'started' then return end
+if GetResourceState('tk_dispatch') == 'missing' then return end
 Dispatch = Dispatch or {}
 
 Dispatch.SendAlert = function(data)
@@ -18,3 +18,5 @@ Dispatch.SendAlert = function(data)
         jobs = data.jobs or {'police'},
     })
 end
+
+return Dispatch

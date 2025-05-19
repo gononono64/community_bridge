@@ -1,6 +1,5 @@
 local resourceName = "lb-phone"
-local configValue = BridgeSharedConfig.Phone
-if (configValue == "auto" and GetResourceState(resourceName) ~= "started") or (configValue ~= "auto" and configValue ~= resourceName) then return end
+if GetResourceState(resourceName) == 'missing' then return end
 Phone = Phone or {}
 
 ---@diagnostic disable-next-line: duplicate-set-field
@@ -34,3 +33,5 @@ RegisterNetEvent('community_bridge:Server:genericEmail', function(data)
     Prints.Debug('community_bridge:Server:genericEmail Hit')
     return Phone.SendEmail(src, data.email, data.title, data.message)
 end)
+
+return Phone

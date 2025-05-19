@@ -1,4 +1,4 @@
-if GetResourceState('esx_property') ~= 'started' then return end
+if GetResourceState('esx_property') == 'missing' then return end
 
 Housing = Housing or {}
 
@@ -11,3 +11,5 @@ RegisterNetEvent('esx_property:leave', function(insideId)
     local src = source
     TriggerEvent('community_bridge:Server:_OnPlayerInside', src, insideId)
 end)
+
+return Housing

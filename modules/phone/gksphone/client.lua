@@ -1,6 +1,5 @@
 local resourceName = "gksphone"
-local configValue = BridgeSharedConfig.Phone
-if (configValue == "auto" and GetResourceState(resourceName) ~= "started") or (configValue ~= "auto" and configValue ~= resourceName) then return end
+if GetResourceState(resourceName) == 'missing' then return end
 
 Phone = Phone or {}
 
@@ -13,3 +12,5 @@ Phone = Phone or {}
 Phone.SendEmail = function(email, title, message)
     return exports["gksphone"]:SendNewMail({ sender = email, image = '/html/static/img/icons/mail.png', subject = title, message = message })
 end
+
+return Phone

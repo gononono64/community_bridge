@@ -1,4 +1,4 @@
-if GetResourceState('bcs-housing') ~= 'started' then return end
+if GetResourceState('bcs-housing') == 'missing' then return end
 
 Housing = Housing or {}
 
@@ -9,3 +9,5 @@ end)
 RegisterNetEvent("Housing:client:DeleteFurnitures", function()
     TriggerServerEvent('community_bridge:Server:_OnPlayerInside', false)
 end)
+
+return Housing

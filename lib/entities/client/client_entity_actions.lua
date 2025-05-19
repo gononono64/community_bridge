@@ -12,7 +12,6 @@ ClientEntityActions.RegisteredActions  = {} -- New: Registry for action implemen
 -- @param entityId string|number The ID of the entity.
 function ClientEntityActions.ProcessNextAction(entityId)
     if ClientEntityActions.IsActionRunning [entityId] then return end -- Already running something
-    print(string.format("[ClientEntityActions] Processing next action for entity %s", entityId))
     local queue = ClientEntityActions.ActionQueue[entityId]
     if not queue or #queue == 0 then return end -- Queue is empty
 
@@ -27,7 +26,6 @@ function ClientEntityActions.ProcessNextAction(entityId)
 
     -- Look up the action in the registry
     local actionFunc = ClientEntityActions.RegisteredActions [nextAction.name]
-    print(string.format("[ClientEntityActions] Action '%s' dequeued for entity %s", nextAction.name, entityId))
     if actionFunc then
         -- print(string.format("[ClientEntityActions] Starting action '%s' for entity %s", nextAction.name, entityId))
         ClientEntityActions.IsActionRunning [entityId] = true

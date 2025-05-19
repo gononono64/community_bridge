@@ -1,4 +1,4 @@
-if GetResourceState('lb-tablet') ~= 'started' then return end
+if GetResourceState('lb-tablet') == 'missing' then return end
 Dispatch = Dispatch or {}
 
 local function getPriorityLevel(priority)
@@ -38,3 +38,5 @@ Dispatch.SendAlert = function(data)
     }
     TriggerServerEvent("community_bridge:server:dispatch:sendAlert", alertData)
 end
+
+return Dispatch

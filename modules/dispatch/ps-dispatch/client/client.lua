@@ -1,4 +1,4 @@
-if GetResourceState('ps-dispatch') ~= 'started' then return end
+if GetResourceState('ps-dispatch') == 'missing' then return end
 if GetResourceState('lb-tablet') == 'started' then return end
 Dispatch = Dispatch or {}
 
@@ -28,3 +28,5 @@ Dispatch.SendAlert = function(data)
     }
     exports["ps-dispatch"]:CustomAlert(alertData)
 end
+
+return Dispatch

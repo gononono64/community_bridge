@@ -4,14 +4,12 @@ HelpText = HelpText or {}
 ---@param message string
 ---@param _position string
 ---@return nil
----@diagnostic disable-next-line: duplicate-set-field
 HelpText.ShowHelpText = function(message, _position)
     return Framework.ShowHelpText(message, _position)
 end
 
 ---This will hide the help text message on the screen
 ---@return nil
----@diagnostic disable-next-line: duplicate-set-field
 HelpText.HideHelpText = function()
     return Framework.HideHelpText()
 end
@@ -23,3 +21,5 @@ end)
 RegisterNetEvent('community_bridge:Client:HideHelpText', function()
     HelpText.HideHelpText()
 end)
+
+return HelpText

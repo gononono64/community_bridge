@@ -1,4 +1,4 @@
-if GetResourceState('qb-weathersync') ~= 'started' then return end
+if GetResourceState('qb-weathersync') == 'missing' then return end
 Weather = Weather or {}
 
 ---comment
@@ -10,3 +10,5 @@ Weather.ToggleSync = function(toggle)
         TriggerEvent("qb-weathersync:client:DisableSync")
     end
 end
+
+return Weather
