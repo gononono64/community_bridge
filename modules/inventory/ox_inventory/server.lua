@@ -5,7 +5,7 @@ local ox_inventory = exports.ox_inventory
 local registeredShops = {}
 
 Inventory = Inventory or {}
-
+Inventory.Stashes = Inventory.Stashes or {}
 ---This will add an item, and return true or false based on success
 ---@param src number
 ---@param item string
@@ -94,8 +94,9 @@ end
 ---@param groups table
 ---@param coords table
 ---@return nil
-Inventory.OpenStash = function(src, id, label, slots, weight, owner, groups, coords)
-    TriggerClientEvent('ox_inventory:openInventory', src, 'stash', 'stash_' .. id)
+Inventory.OpenStash = function(src, id)
+    assert(Inventory.Stashes[id], "Stash not found", id)
+    TriggerClientEvent('ox_inventory:openInventory', src, 'stash', id)
 end
 
 ---This will register a stash
@@ -108,7 +109,17 @@ end
 ---@param coords table
 ---@return boolean
 Inventory.RegisterStash = function(id, label, slots, weight, owner, groups, coords)
-    return ox_inventory:RegisterStash(id, label, slots, weight, owner)
+    if Inventory.Stashes[id] then return true end
+    Inventory.Stashes[id] = {
+        id = id,
+        label = label,
+        slots = slots,
+        weight = weight,
+        owner = owner,
+        groups = groups,
+        coords = coords
+    }
+    return ox_inventory:RegisterStash(id, label, slots, weight, owner, groups)
 end
 
 ---This will return a boolean if the player has the item.

@@ -4,6 +4,7 @@ local sloth = exports['ps-inventory']
 local registeredShops = {}
 
 Inventory = Inventory or {}
+Inventory.Stashes = Inventory.Stashes or {}
 
 ---This will add an item, and return true or false based on success
 ---@param src number
@@ -106,6 +107,16 @@ end
 ---@param coords table
 ---@return boolean
 Inventory.RegisterStash = function(id, label, slots, weight, owner, groups, coords)
+    if Inventory.Stashes[id] then return true end
+    Inventory.Stashes[id] = {
+        id = id,
+        label = label,
+        slots = slots,
+        weight = weight,
+        owner = owner,
+        groups = groups,
+        coords = coords
+    }    
     return true
 end
 

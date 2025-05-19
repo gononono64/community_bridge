@@ -20,7 +20,7 @@ local function SpawnEntity(entityData)
 
     local entity = nil
     local coords = entityData.coords
-    local rotation = entityData.rotation
+    local rotation = entityData.rotation or vector3(0.0, 0.0, 0.0) -- Default rotation if not provided
 
     if entityData.entityType == 'object' then
         entity = CreateObject(model, coords.x, coords.y, coords.z, false, false, false)
@@ -40,7 +40,7 @@ local function SpawnEntity(entityData)
         SetModelAsNoLongerNeeded(model)
         SetEntityAsMissionEntity(entity, true, true) -- Keep entity from being deleted by game engine
         FreezeEntityPosition(entity, true) -- Optional freeze based on meta
-        if entityData.OnSpawn and type(entityData.OnSpawn) == 'function' then
+        if entityData.OnSpawn then
             entityData.OnSpawn(entityData)
         end
         -- print(string.format("[ClientEntity] Spawned %s entity %s (GameID: %s)", entityData.entityType, entityData.id, entity))
@@ -59,7 +59,7 @@ local function RemoveEntity(entityData)
         SetEntityAsMissionEntity(entityHandle, false, false)
         DeleteEntity(entityHandle)
     end
-    if entityData.OnRemove and type(entityData.OnRemove) == 'function' then
+    if entityData.OnRemove then
         entityData.OnRemove(entityData)
     end
 end

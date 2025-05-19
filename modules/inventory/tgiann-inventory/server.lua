@@ -4,6 +4,7 @@ if GetResourceState('tgiann-inventory') ~= 'started' then return end
 local tgiann = exports["tgiann-inventory"]
 
 Inventory = Inventory or {}
+Inventory.Stashes = Inventory.Stashes or {}
 
 ---This will add an item, and return true or false based on success
 ---@param src number

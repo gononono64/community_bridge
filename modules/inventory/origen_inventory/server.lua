@@ -2,6 +2,7 @@
 if GetResourceState('origen_inventory') ~= 'started' then return end
 
 Inventory = Inventory or {}
+Inventory.Stashes = Inventory.Stashes or {}
 
 local origin = exports.origen_inventory
 
@@ -107,7 +108,9 @@ end
 ---@param groups table
 ---@param coords table
 ---@return nil
-Inventory.OpenStash = function(src, id, label, slots, weight, owner, groups, coords)
+Inventory.OpenStash = function(src, id)
+    local stash = Inventory.Stashes[id]
+    assert(stash, "Stash not found", id)
     return origin:OpenInventory(src, 'stash', id)
 end
 
@@ -121,6 +124,16 @@ end
 ---@param coords table
 ---@return boolean
 Inventory.RegisterStash = function(id, label, slots, weight, owner, groups, coords)
+    if Inventory.Stashes[id] then return true end
+    Inventory.Stashes[id] = {
+        id = id,
+        label = label,
+        slots = slots,
+        weight = weight,
+        owner = owner,
+        groups = groups,
+        coords = coords
+    }
     return origin:registerStash(id, label, slots, weight, owner, groups, coords)
 end
 

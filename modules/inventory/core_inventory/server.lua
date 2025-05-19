@@ -2,7 +2,7 @@
 if GetResourceState('core_inventory') ~= 'started' then return end
 
 Inventory = Inventory or {}
-
+Inventory.Stashes = Inventory.Stashes or {}
 local core = exports.core_inventory
 
 ---This will add an item, and return true or false based on success
@@ -133,10 +133,10 @@ end
 ---@param groups table
 ---@param coords table
 ---@return nil
-Inventory.OpenStash = function(src, id, label, slots, weight, owner, groups, coords)
-    if not slots then slots = 30 end
-    local mathyShit = slots / 2
-    core:openInventory(playerid, id, 'stash', mathyShit, mathyShit, true, nil, false)
+Inventory.OpenStash = function(src, id)
+    local stash = Inventory.Stashes[id]
+    assert(stash, "Stash not found", id)
+    core:openInventory(src, id, 'stash', stash.slots, stash.weight, true, nil, false)
 end
 
 ---This will register a stash
@@ -149,8 +149,18 @@ end
 ---@param coords table
 ---@return boolean
 Inventory.RegisterStash = function(id, label, slots, weight, owner, groups, coords)
+    if Inventory.Stashes[id] then return true end
     if not slots then slots = 30 end
     local mathyShit = slots / 2
+    Inventory.Stashes[id] = {
+        id = id,
+        label = label,
+        slots = mathyShit,
+        weight = mathyShit,
+        owner = owner,
+        groups = groups,
+        coords = coords
+    }
     core:openInventory(nil, id, 'stash', mathyShit, mathyShit, false, nil, false)
     return true
 end

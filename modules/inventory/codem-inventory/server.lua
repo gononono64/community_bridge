@@ -2,6 +2,7 @@
 if GetResourceState('codem-inventory') ~= 'started' then return end
 
 Inventory = Inventory or {}
+Inventory.Stashes = Inventory.Stashes or {}
 
 local codem = exports['codem-inventory']
 
@@ -104,9 +105,15 @@ end
 ---@param groups table
 ---@param coords table
 ---@return nil
-Inventory.OpenStash = function(src, id, label, slots, weight, owner, groups, coords)
+Inventory.OpenStash = function(src, id)
+    local stash = Inventory.Stashes[id]
+    assert(stash, "Stash not found", id)
+    local label = stash.label
+    local slots = stash.slots
+    local weight = stash.weight
     TriggerClientEvent('community_bridge:client:codem-inventory:openStash', src, id, { label = label, slots = slots, weight = weight })
 end
+
 
 ---This will register a stash
 ---@param id number||string
@@ -118,6 +125,16 @@ end
 ---@param coords table
 ---@return boolean
 Inventory.RegisterStash = function(id, label, slots, weight, owner, groups, coords)
+    if Inventory.Stashes[id] then return true end
+    Inventory.Stashes[id] = {
+        id = id,
+        label = label,
+        slots = slots,
+        weight = weight,
+        owner = owner,
+        groups = groups,
+        coords = coords
+    }
     return true
 end
 

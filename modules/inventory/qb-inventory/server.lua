@@ -3,6 +3,7 @@ if GetResourceState('qb-inventory') ~= 'started' then return end
 local qbInventory = exports['qb-inventory']
 
 Inventory = Inventory or {}
+Inventory.Stashes = Inventory.Stashes or {}
 
 local registeredShops = {}
 local v1ShopData = {}
@@ -85,8 +86,11 @@ end
 ---@param groups table
 ---@param coords table
 ---@return nil
-Inventory.OpenStash = function(src, id, label, slots, weight, owner, groups, coords)
-    TriggerClientEvent('community_bridge:client:qb-inventory:openStash', src, id, { weight = weight, slots = slots })
+Inventory.OpenStash = function(src, id)
+    local stash = Inventory.Stashes[id]
+    assert(stash, "Stash not found", id)
+
+    TriggerClientEvent('community_bridge:client:qb-inventory:openStash', src, id, { weight = stash.weight, slots = stash.slots})
 end
 
 ---This will register a stash
@@ -99,6 +103,16 @@ end
 ---@param coords table
 ---@return boolean
 Inventory.RegisterStash = function(id, label, slots, weight, owner, groups, coords)
+    if Inventory.Stashes[id] then return true end
+    Inventory.Stashes[id] = {
+        id = id,
+        label = label,
+        slots = slots,
+        weight = weight,
+        owner = owner,
+        groups = groups,
+        coords = coords
+    }
     return true
 end
 
