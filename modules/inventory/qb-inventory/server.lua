@@ -89,8 +89,12 @@ end
 Inventory.OpenStash = function(src, id)
     local stash = Inventory.Stashes[id]
     assert(stash, "Stash not found", id)
-
-    TriggerClientEvent('community_bridge:client:qb-inventory:openStash', src, id, { weight = stash.weight, slots = stash.slots})
+    -- TriggerClientEvent("inventory:client:OpenInventory", src, "stash", id, stash)
+    if getInventoryNewVersion() then
+       
+        return exports['qb-inventory']:OpenInventory(src, 'stash', id, stash)
+    end
+    TriggerClientEvent('community_bridge:client:qb-inventory:openStash', src, id, stash)
 end
 
 ---This will register a stash
@@ -192,8 +196,8 @@ end
 -- @param shopInventory table
 -- @param shopCoords table
 -- @param shopGroups table
-Inventory.CreateShop = function(src, shopTitle, shopInventory, shopCoords, shopGroups)
-    if not shopTitle or not shopInventory or not shopCoords then return end
+Inventory.CreateShop = function(shopTitle, shopInventory, shopCoords, shopGroups)
+    if not shopTitle or not shopInventory then return end
     if registeredShops[shopTitle] then return true end
     registeredShops[shopTitle] = true
     local newVersion = getInventoryNewVersion()
@@ -212,10 +216,13 @@ Inventory.CreateShop = function(src, shopTitle, shopInventory, shopCoords, shopG
         end
 
         shopData.slots = #shopData.items
-        TriggerClientEvent("inventory:client:OpenInventory", src, "shop", shopTitle, shopData)
+        -- TriggerClientEvent("inventory:client:OpenInventory", src, "shop", shopTitle, shopData)
         v1ShopData[shopTitle] = shopData
         print("QB-INVENTORY: You are using an outdated version of qb-inventory, please update to the latest version. Stuff will still work but you are using litterally the most exploitable inventory in fivem.")
     end
 end
 
 return Inventory
+
+
+
