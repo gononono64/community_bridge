@@ -247,6 +247,7 @@ end
 ---@param entity number
 ---@return table
 function Utility.GetEntitySkinData(entity)
+    print('This is depricated. Please yell at newb to update his scripts')
     local skinData = { clothing = {}, props = {} }
     for i = 0, 11 do
         skinData.clothing[i] = { GetPedDrawableVariation(entity, i), GetPedTextureVariation(entity, i) }
@@ -262,6 +263,7 @@ end
 ---@param skinData table
 ---@return boolean
 function Utility.SetEntitySkinData(entity, skinData)
+    print('This is depricated. Please yell at newb to update his scripts')
     for i = 0, 11 do
         SetPedComponentVariation(entity, i, skinData.clothing[i][1], skinData.clothing[i][2], 0)
     end

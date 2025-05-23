@@ -13,6 +13,7 @@ shared_scripts {
     'lib/init.lua',
     'modules/math/*.lua',
     'modules/locales/*.lua',
+    'modules/clothing/**/shared.lua',
 }
 
 server_scripts {
