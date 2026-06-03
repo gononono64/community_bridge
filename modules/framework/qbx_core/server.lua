@@ -547,11 +547,6 @@ AddEventHandler("playerDropped", function()
     TriggerEvent("community_bridge:Server:OnPlayerUnload", src)
 end)
 
-AddEventHandler("playerDropped", function()
-    local src = source
-    TriggerEvent("community_bridge:Server:OnPlayerUnload", src)
-end)
-
 Framework.Commands = Framework.Commands or {}
 
 ---@description Adds a command to the Qbox framework
