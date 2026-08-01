@@ -84,7 +84,7 @@ jobs:
       - name: Prepare release package
         run: |
           RELEASE_ROOT="release/community_bridge"
-          mkdir -p "$RELEASE_ROOT"
+          mkdir -p "$RELEASE_ROOT/web"
 
           rsync -a \
             --exclude '.git' \
@@ -93,7 +93,13 @@ jobs:
             --exclude '.github' \
             --exclude 'release' \
             --exclude 'node_modules' \
+            --exclude 'web' \
             ./ "$RELEASE_ROOT/"
+
+          # Pre-built web/dist/ is committed; ship the built UI only and leave
+          # the vite source and tooling (src/, package.json, configs) behind.
+          rsync -a web/dist/ "$RELEASE_ROOT/web/dist/"
+          rsync -a web/public/ "$RELEASE_ROOT/web/public/"
 
       - name: Create zip archive
         run: |
